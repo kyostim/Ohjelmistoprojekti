@@ -28,6 +28,19 @@ app.put('/configuration', (request, response) => {
   response.status(200).send('ok');
 });
 
+app.get('/image', function (request, response) {
+  console.log('image get');
+  
+  const filename = './Responses/basic.xml'; 
+  fileSystem.exists(filename,  function(exists) {
+    if(exists) {
+      const fileContent = fileSystem.readFileSync(filename, 'utf8');
+      response.set('Content-Type', 'text/xml');
+      response.send(fileContent);
+    }
+  });
+});
+
 app.listen(config.basePort, function(){
   console.log("Listening port " + config.basePort);
 })
