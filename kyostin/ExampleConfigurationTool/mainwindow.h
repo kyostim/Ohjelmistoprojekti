@@ -5,6 +5,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QImage>
 
 #include "centriaxmlparser.h"
 
@@ -28,8 +29,12 @@ private slots:
 
     void on_pushButtonSetConfiguration_clicked();
 
+    void on_pushButtonGetImage_clicked();
+
 private:
     Ui::MainWindow *ui;
+
+    int _getState = 0;
 
     QNetworkAccessManager *_qNetworkAccessManager = nullptr;
     QNetworkRequest _qNetworkRequest;

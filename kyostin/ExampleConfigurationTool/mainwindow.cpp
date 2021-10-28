@@ -25,15 +25,26 @@ void MainWindow::managerFinished(QNetworkReply *qNetworkReply)
 {
     if(!qNetworkReply->error())
     {
-        QString responseContent = qNetworkReply->readAll();
-        ui->textEditXMLContent->setText(responseContent);
-        QMap<QString, QString> configurationTags = CentriaXMLParser::ParseXMLContent("OCR_CONFIGURATION", responseContent);
-        PopulateGrid(configurationTags);
+        if(_getState == 1)
+        {
+            QString responseContent = qNetworkReply->readAll();
+            ui->textEditXMLContent->setText(responseContent);
+            QMap<QString, QString> configurationTags = CentriaXMLParser::ParseXMLContent("OCR_CONFIGURATION", responseContent);
+            PopulateGrid(configurationTags);
+        }
+        else if(_getState == 2)
+        {
+            QByteArray imageData = qNetworkReply->readAll();
+            QImage image;
+            image.loadFromData(imageData, "JPG");
+            ui->labelImage->setPixmap(QPixmap::fromImage(image));
+        }
     }
     else
     {
         ui->textEditXMLContent->setText(qNetworkReply->errorString());
     }
+    _getState = 0;
 }
 
 void MainWindow::on_pushButtonGetConfiguration_clicked()
@@ -45,6 +56,7 @@ void MainWindow::on_pushButtonGetConfiguration_clicked()
 
         QString getConfigurationRequest(QString("http://%1:%2/configuration").arg(ipAddress).arg(port));
 
+        _getState = 1;
         _qNetworkRequest.setUrl(QUrl(getConfigurationRequest));
         _qNetworkAccessManager->get(_qNetworkRequest);
     }
@@ -92,5 +104,20 @@ void MainWindow::PopulateGrid(QMap<QString, QString> &configurationTags)
 
 
         row++;
+    }
+}
+
+void MainWindow::on_pushButtonGetImage_clicked()
+{
+    if(_qNetworkAccessManager != nullptr)
+    {
+        QString ipAddress = ui->lineEditIPAddress->text();
+        int port = ui->spinBoxPort->value();
+
+        QString getConfigurationRequest(QString("http://%1:%2/image").arg(ipAddress).arg(port));
+
+        _getState = 2;
+        _qNetworkRequest.setUrl(QUrl(getConfigurationRequest));
+        _qNetworkAccessManager->get(_qNetworkRequest);
     }
 }

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1333</width>
     <height>600</height>
    </rect>
   </property>
@@ -32,8 +32,8 @@
      <rect>
       <x>20</x>
       <y>200</y>
-      <width>741</width>
-      <height>91</height>
+      <width>451</width>
+      <height>131</height>
      </rect>
     </property>
    </widget>
@@ -101,9 +101,35 @@
      <rect>
       <x>20</x>
       <y>350</y>
-      <width>741</width>
+      <width>451</width>
       <height>192</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonGetImage">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>100</y>
+      <width>141</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Get Image</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelImage">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>10</y>
+      <width>861</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>
@@ -112,7 +138,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1333</width>
      <height>30</height>
     </rect>
    </property>
