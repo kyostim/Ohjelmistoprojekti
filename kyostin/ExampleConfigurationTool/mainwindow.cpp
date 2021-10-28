@@ -13,6 +13,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    if(_qNetworkAccessManager != nullptr)
+    {
+        delete _qNetworkAccessManager;
+        _qNetworkAccessManager = nullptr;
+    }
     delete ui;
 }
 
@@ -22,9 +27,14 @@ void MainWindow::managerFinished(QNetworkReply *qNetworkReply)
     {
         QString responseContent = qNetworkReply->readAll();
         ui->textEditXMLContent->setText(responseContent);
+        QMap<QString, QString> configurationTags = CentriaXMLParser::ParseXMLContent("OCR_CONFIGURATION", responseContent);
+        PopulateGrid(configurationTags);
+    }
+    else
+    {
+        ui->textEditXMLContent->setText(qNetworkReply->errorString());
     }
 }
-
 
 void MainWindow::on_pushButtonGetConfiguration_clicked()
 {
@@ -33,11 +43,54 @@ void MainWindow::on_pushButtonGetConfiguration_clicked()
         QString ipAddress = ui->lineEditIPAddress->text();
         int port = ui->spinBoxPort->value();
 
-        QString getConfigurationRequest(QString("http://%1:%2/config").arg(ipAddress).arg(port));
+        QString getConfigurationRequest(QString("http://%1:%2/configuration").arg(ipAddress).arg(port));
 
         _qNetworkRequest.setUrl(QUrl(getConfigurationRequest));
         _qNetworkAccessManager->get(_qNetworkRequest);
     }
+}
+
+void MainWindow::on_pushButtonSetConfiguration_clicked()
+{
+    if(_qNetworkAccessManager != nullptr)
+    {
+        QString ipAddress = ui->lineEditIPAddress->text();
+        int port = ui->spinBoxPort->value();
+
+        QString putConfigurationRequest(QString("http://%1:%2/configuration?xmlFileContent=").arg(ipAddress).arg(port));
+        putConfigurationRequest.append(ui->textEditXMLContent->toPlainText());
+        _qNetworkRequest.setUrl(QUrl(putConfigurationRequest));
+
+        QByteArray xmlContent;
+        xmlContent.append(ui->textEditXMLContent->toPlainText());
+        _qNetworkAccessManager->put(_qNetworkRequest,xmlContent);
+    }
+}
+
+void MainWindow::PopulateGrid(QMap<QString, QString> &configurationTags)
+{
+    QList<QString> keys = configurationTags.keys();
+    ui->tableWidgetConfigurations->setColumnCount(2);
+    ui->tableWidgetConfigurations->setRowCount(keys.size());
+    QStringList headers;
+    headers.append("Property");
+    headers.append("Value");
+    ui->tableWidgetConfigurations->setHorizontalHeaderLabels(headers);
+
+    int row = 0;
+    foreach(QString key, keys)
+    {
+        QString value = configurationTags[key];
+        QTableWidgetItem* keyItem = new QTableWidgetItem();
+        keyItem->setText(key);
+        ui->tableWidgetConfigurations->setItem(row, 0, keyItem);
+
+        QTableWidgetItem* valueItem = new QTableWidgetItem();
+        valueItem->setText(value);
+        ui->tableWidgetConfigurations->setItem(row, 1, valueItem);
 
 
+
+        row++;
+    }
 }

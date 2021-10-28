@@ -11,10 +11,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    centriaxmlparser.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    centriaxmlparser.h \
     mainwindow.h
 
 FORMS += \

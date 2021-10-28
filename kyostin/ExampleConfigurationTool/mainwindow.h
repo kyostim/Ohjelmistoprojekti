@@ -6,6 +6,8 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
+#include "centriaxmlparser.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,10 +26,14 @@ private slots:
 
     void on_pushButtonGetConfiguration_clicked();
 
+    void on_pushButtonSetConfiguration_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     QNetworkAccessManager *_qNetworkAccessManager = nullptr;
     QNetworkRequest _qNetworkRequest;
+
+    void PopulateGrid(QMap<QString, QString> &configurationTags);
 };
 #endif // MAINWINDOW_H
