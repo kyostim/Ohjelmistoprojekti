@@ -42,6 +42,19 @@ app.get('/image', function (request, response) {
   });
 });
 
+app.get('/result', function (request, response) {
+  console.log('configuration result');
+  
+  const filename = './Responses/result.xml'; 
+  fileSystem.exists(filename,  function(exists) {
+    if(exists) {
+      const fileContent = fileSystem.readFileSync(filename, 'utf8');
+      response.set('Content-Type', 'text/xml');
+      response.send(fileContent);
+    }
+  });
+});
+
 app.listen(config.basePort, function(){
   console.log("Listening port " + config.basePort);
 })
