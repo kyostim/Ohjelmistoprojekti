@@ -31,12 +31,13 @@ app.put('/configuration', (request, response) => {
 app.get('/image', function (request, response) {
   console.log('image get');
   
-  const filename = './Responses/basic.xml'; 
+  const filename = './Responses/Image.jpg'; 
   fileSystem.exists(filename,  function(exists) {
     if(exists) {
-      const fileContent = fileSystem.readFileSync(filename, 'utf8');
-      response.set('Content-Type', 'text/xml');
-      response.send(fileContent);
+      const imageContent = fileSystem.readFileSync(filename);
+      console.log('image found');
+      response.writeHead(200, {'Content-Type': 'image/jpeg'});
+      response.end(imageContent); 
     }
   });
 });
