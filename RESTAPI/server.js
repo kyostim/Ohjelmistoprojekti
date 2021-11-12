@@ -9,7 +9,8 @@ app.use(express.json());
 app.get('/configuration', function (request, response) {
   console.log('configuration get');
   
-  const filename = './Responses/basic.xml'; 
+  //const filename = './Responses/basic.xml'; 
+  const filename = '/home/centria/projects/SulautetutJarjestelmat/BlobDetection/configuration.xml';
   fileSystem.exists(filename,  function(exists) {
     if(exists) {
       const fileContent = fileSystem.readFileSync(filename, 'utf8');
@@ -22,7 +23,8 @@ app.get('/configuration', function (request, response) {
 app.put('/configuration', (request, response) => {
   console.log('configuration put');
 
-  const filename = './Responses/basicReq.xml';
+  //const filename = './Responses/basicReq.xml';
+  const filename = '/home/centria/projects/SulautetutJarjestelmat/BlobDetection/configuration.xml';
   const data = request.query['xmlFileContent']; 
   fileSystem.writeFileSync(filename, data);
   response.status(200).send('ok');
@@ -31,7 +33,8 @@ app.put('/configuration', (request, response) => {
 app.get('/image', function (request, response) {
   console.log('image get');
   
-  const filename = './Responses/Image.jpg'; 
+  //const filename = './Responses/Image.jpg'; 
+  const filename = '/home/centria/projects/Ohjelmistoprojekti/RESTAPI/Image.jpg';
   fileSystem.exists(filename,  function(exists) {
     if(exists) {
       const imageContent = fileSystem.readFileSync(filename);
